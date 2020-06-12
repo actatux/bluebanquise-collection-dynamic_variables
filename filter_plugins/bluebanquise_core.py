@@ -34,9 +34,6 @@ def icebergs_groups_list(groups, iceberg_naming):
         if re.match('^'+iceberg_naming+'[0-9]+', group):
             data.append(group)
 
-    if not data:
-        raise AnsibleFilterError(f"Could not find any groups that match iceberg naming. (groups={groups})", iceberg_naming)
-
     return data
 
 def number_of_icebergs(groups, iceberg_naming):
