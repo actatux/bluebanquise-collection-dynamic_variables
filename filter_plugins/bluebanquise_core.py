@@ -139,6 +139,53 @@ def node_main_network_interface(host):
     # Note: may miss a sort if possible if are valid
     return (''.join(sorted(set(main_ntw_nic)))).strip()
 
+def _get_host_aliases(host):
+    aliases = []
+
+    if 'global_alias' in host:
+        for alias in host['global_alias']:
+            aliases.append(alias)
+
+    # TODO {% if host_dict['alias'] is defined and host_iceberg == j2_current_iceberg %}
+    if 'alias' in host:
+        for alias in host['alias']:
+            aliases.append(alias)
+
+    return aliases
+
+def get_hosts(inventory, domain_name):
+    # TODO implement global_network_settings tests
+    # TODO range group multi iceberg
+    hosts = []
+
+    for hostname in inventory:
+        host = inventory[hostname]
+
+        if 'network_interfaces' in host:
+            main_ntw_itf = node_main_network_interface(host)
+            aliases = _get_host_aliases(host)
+            for itf in host['network_interfaces']:
+                network = host['network_interfaces'][itf]
+                if itf == main_ntw_itf:
+                    hosts.append(
+                        {'ip4': network['ip4'],
+                         'hostname': [hostname,
+                                      f"{hostname}.{domain_name}",
+                                      f"{hostname}-{network['network']}"],
+                         'aliases': aliases})
+                else:
+                    hosts.append({'ip4': network['ip4'],
+                                'hostname': [f"{hostname}-{network['network']}"]})
+
+        if 'bmc' in host:
+            bmc = host['bmc']
+            aliases = _get_host_aliases(bmc)
+            hosts.append({'ip4': bmc['ip4'],
+                          'hostname': [bmc['name']],
+                          'aliases': aliases})
+
+    return hosts
+
 class FilterModule(object):
     ''' BlueBanquise Core filters. '''
 
@@ -153,4 +200,5 @@ class FilterModule(object):
             'master_groups_list': master_groups_list,
             'node_main_network': node_main_network,
             'node_main_network_interface': node_main_network_interface,
+            'get_hosts': get_hosts,
         }
