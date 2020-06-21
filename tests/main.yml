@@ -20,6 +20,9 @@
     - name: Compare filters results with j2 variables from inventory
       include_tasks: check_filters.yml
 
+    - name: Test extract filters
+      include_tasks: check_extracts.yml
+
     - name: Play role j2_variables
       include_role:
         name: j2_variables
