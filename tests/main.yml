@@ -1,0 +1,38 @@
+---
+- name: Use filters to set j2 variables from the inventory
+  # So we don't need to rely on the j2 variables which are defined
+  # in the user's inventory.
+  hosts: all
+  gather_facts: no
+  collections:
+    - bluebanquise.dynamic_variables
+  tasks:
+    - name: Display all variables/facts known for a host
+      debug:
+        var: hostvars[inventory_hostname]
+        verbosity: 3
+
+    - name: Display all groups
+      debug:
+        var: groups
+        verbosity: 3
+
+    - name: Compare filters results with j2 variables from inventory
+      include_tasks: check_filters.yml
+
+    - name: Play role j2_variables
+      include_role:
+        name: j2_variables
+
+    - name: Print j2 variables from the filters
+      debug:
+        msg: |
+          j2_icebergs_groups_list={{ j2_icebergs_groups_list }}
+          j2_number_of_icebergs={{ j2_number_of_icebergs }}
+          j2_current_iceberg={{ j2_current_iceberg }}
+          j2_current_iceberg_number={{ j2_current_iceberg_number }}
+          j2_current_iceberg_network={{ j2_current_iceberg_network }}
+          j2_equipment_groups_list={{ j2_equipment_groups_list }}
+          j2_master_groups_list={{ j2_master_groups_list }}
+          j2_node_main_network={{ j2_node_main_network }}
+          j2_node_main_network_interface={{ j2_node_main_network_interface }}

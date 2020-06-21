@@ -1,0 +1,12 @@
+---
+- name: Define j2 variables with filters on inventory
+  set_fact:
+    j2_icebergs_groups_list: "{{ groups | bluebanquise.dynamic_variables.icebergs_groups_list(iceberg_naming) }}"
+    j2_number_of_icebergs: "{{ groups | bluebanquise.dynamic_variables.number_of_icebergs(iceberg_naming) }}"
+    j2_current_iceberg: "{{ hostvars[inventory_hostname] | bluebanquise.dynamic_variables.current_iceberg }}"
+    j2_current_iceberg_number: "{{ hostvars[inventory_hostname] | bluebanquise.dynamic_variables.current_iceberg_number }}"
+    j2_current_iceberg_network: "{{ hostvars[inventory_hostname] | bluebanquise.dynamic_variables.current_iceberg_network }}"
+    j2_equipment_groups_list: "{{ groups | bluebanquise.dynamic_variables.equipment_groups_list(equipment_naming) }}"
+    j2_master_groups_list: "{{ groups | bluebanquise.dynamic_variables.master_groups_list(master_groups_naming) }}"
+    j2_node_main_network: "{{ hostvars[inventory_hostname] | bluebanquise.dynamic_variables.node_main_network }}"
+    j2_node_main_network_interface: "{{ hostvars[inventory_hostname] | bluebanquise.dynamic_variables.node_main_network_interface }}"
