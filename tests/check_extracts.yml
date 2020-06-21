@@ -1,5 +1,4 @@
 ---
 - name: Print hostvars|extract_hosts
   debug:
-    #msg: "filter={{ hostvars | bluebanquise.dynamic_variables.extract_hosts(domain_name) }} | j2={{ j2_node_main_network_interface }}"
-    var: hostvars | bluebanquise.dynamic_variables.extract_hosts(domain_name)
+    var: hostvars | bluebanquise.dynamic_variables.extract_hosts(inventory_hostname)

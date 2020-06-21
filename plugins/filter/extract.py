@@ -23,33 +23,35 @@
 '''Ansible Filter plugin to extract data from BlueBanquise inventories'''
 
 from ansible.errors import AnsibleFilterError
-from ansible_collections.bluebanquise.dynamic_variables.plugins.filter.core import node_main_network_interface
+from ansible_collections.bluebanquise.dynamic_variables.plugins.filter.core import current_iceberg, node_main_network_interface
 
-def _get_host_aliases(host):
+def _get_host_aliases(host, iceberg):
     aliases = []
 
     if 'global_alias' in host:
         for alias in host['global_alias']:
             aliases.append(alias)
 
-    # TODO {% if host_dict['alias'] is defined and host_iceberg == j2_current_iceberg %}
-    if 'alias' in host:
+    # Append aliases for hosts in the same iceberg than current host
+    if 'alias' in host and current_iceberg(host) == iceberg:
         for alias in host['alias']:
             aliases.append(alias)
 
     return aliases
 
-def extract_hosts(inventory, domain_name):
+def extract_hosts(inventory, current_host):
     # TODO implement global_network_settings tests
     # TODO range group multi iceberg
     hosts = []
+    iceberg = current_iceberg(inventory[current_host])
+    domain_name = inventory[current_host]['domain_name']
 
     for hostname in inventory:
         host = inventory[hostname]
 
         if 'network_interfaces' in host:
             main_ntw_itf = node_main_network_interface(host)
-            aliases = _get_host_aliases(host)
+            aliases = _get_host_aliases(host, iceberg)
             for itf in host['network_interfaces']:
                 network = host['network_interfaces'][itf]
                 if itf == main_ntw_itf:
@@ -65,7 +67,7 @@ def extract_hosts(inventory, domain_name):
 
         if 'bmc' in host:
             bmc = host['bmc']
-            aliases = _get_host_aliases(bmc)
+            aliases = _get_host_aliases(bmc, iceberg)
             hosts.append({'ip4': bmc['ip4'],
                           'hostname': [bmc['name']],
                           'aliases': aliases})

@@ -7,7 +7,7 @@
 
 ## Internal hosts
 
-{% for host in hostvars | bluebanquise.dynamic_variables.extract_hosts(domain_name) %}
+{% for host in hostvars | bluebanquise.dynamic_variables.extract_hosts(inventory_hostname) %}
   {% if host['aliases'] is defined and host['aliases'] %}
 {{ host['ip4'] }} {{ host['hostname'] | join(' ') }} {{ host['aliases'] | join(' ') }}
   {% else %}
