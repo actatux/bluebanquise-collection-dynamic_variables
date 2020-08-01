@@ -18,7 +18,7 @@ the inventory files.
 Clone this project:
 
   ```
-  $ git clone https://github.com/actatux/bluebanquise-collection-dynamic_variables.git
+  $ git clone https://github.com/btravouillon/bluebanquise-collection-dynamic_variables.git
   ```
 
 Build and install the collection:

@@ -45,7 +45,7 @@ tags: []
 dependencies: {}
 
 # The URL of the originating SCM repository
-repository: https://github.com/actatux/bluebanquise-collection-dynamic_variables
+repository: https://github.com/btravouillon/bluebanquise-collection-dynamic_variables
 
 # The URL to any online docs
 # documentation: http://docs.example.com
@@ -54,4 +54,4 @@ repository: https://github.com/actatux/bluebanquise-collection-dynamic_variables
 # homepage: http://example.com
 
 # The URL to the collection issue tracker
-issues: https://github.com/actatux/bluebanquise-collection-dynamic_variables/issues
+issues: https://github.com/btravouillon/bluebanquise-collection-dynamic_variables/issues
